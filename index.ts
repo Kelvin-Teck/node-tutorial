@@ -171,7 +171,6 @@ app.post("/auth/login", async (req: Request, res: Response) => {
 
 app.listen(PORT, async () => {
   await sequelize.authenticate()
-  await User.sync();
   console.log("Database connected successfully.");
   console.log(`Server is running on http://localhost:${PORT}`);
 });
