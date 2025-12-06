@@ -8,27 +8,21 @@ module.exports = {
     "password": process.env.DATABASE_PASSWORD,
     "database": process.env.DATABASE_NAME,
     "host": process.env.DATABASE_HOST,
-    "dialect": "postgres",
-    "port": process.env.DATABASE_PORT || 5432
-  },
-  "test": {
-    "username": process.env.DATABASE_USER,
-    "password": process.env.DATABASE_PASSWORD,
-    "database": process.env.DATABASE_NAME_TEST,
-    "host": process.env.DATABASE_HOST,
+    "port": process.env.DATABASE_PORT,
     "dialect": "postgres"
   },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
   "production": {
-    "username": process.env.DATABASE_USER,
-    "password": process.env.DATABASE_PASSWORD,
-    "database": process.env.DATABASE_NAME,
-    "host": process.env.DATABASE_HOST,
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   }
 }
