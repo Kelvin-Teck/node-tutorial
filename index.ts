@@ -3,6 +3,7 @@ import sequelize from "./config/sequelize";
 import User from "./models/user";
 
 import authRouter from "./routes/auth";
+import taskRouter from "./routes/task";
 
 const app = express();
 
@@ -19,7 +20,7 @@ const loggingMiddleware = (req: Request, res: Response, next: NextFunction) => {
 app.use(loggingMiddleware);
 
 app.use("/auth", authRouter);
-
+app.use("/task", taskRouter)
 
 app.listen(PORT, async () => {
   await sequelize.authenticate()
