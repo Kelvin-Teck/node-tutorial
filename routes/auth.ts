@@ -63,7 +63,7 @@ if (!email || !password) {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ id: user.id , email: user.email}, process.env.JWT_SECRET as string, {
       expiresIn:  "1d",
     });
 
