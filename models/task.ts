@@ -6,7 +6,8 @@ class Task extends Model {
     title: string;
     userId: number;
     assigneeId: number;
-    description: string;
+  description: string;
+  isDeleted: boolean;
     status: "pending" | "in-progress" | "completed";
 }
 
@@ -45,6 +46,11 @@ Task.init(
     status: {
         type: DataTypes.ENUM("pending", "in-progress", "completed"),
         defaultValue: "pending",
+      allowNull: false,
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
       allowNull: false,
     },
   },
