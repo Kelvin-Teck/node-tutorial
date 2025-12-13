@@ -8,9 +8,9 @@ dotenv.config();
 const router = express.Router();
 
 router.post("/register", async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password,role} = req.body;
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password||!role) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -26,6 +26,7 @@ router.post("/register", async (req: Request, res: Response) => {
     firstName,
     lastName,
     email,
+    role,
     password: hashedPassword,
   });
 
@@ -35,6 +36,7 @@ router.post("/register", async (req: Request, res: Response) => {
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
+      role:newUser.role
     },
   });
 });

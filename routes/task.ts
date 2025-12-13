@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import Task from "../models/task";
-import { authenticate } from "../middlewares/auth";
+import adminGuard, { authenticate } from "../middlewares/auth";
 
 const router = express.Router();
 
@@ -40,7 +40,8 @@ router.post("/create", authenticate, async (req: Request, res: Response) => {
 
 router.patch(
   "/assign-task/:taskId",
-  authenticate,
+  [authenticate,
+  adminGuard],
   async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const { assigneeId } = req.body;
@@ -118,52 +119,65 @@ router.patch(
 
 router.get("/tasks", authenticate, async (req: Request, res: Response) => {
   try {
-    const { status } = req.query;
+    const { status, page, limit } = req.query;
+    
+   const  pageNumber  = Number(page) || 1;
+    const pageLimit = Number(limit) || 10;
+    console.log(pageNumber, pageLimit);
+    const offset = (pageNumber -1 ) * pageLimit;
 
     if (status == "pending") {
-      const tasks = await Task.findAll({
+      const {rows, count} = await Task.findAndCountAll({
         where: {
           userId: req.user.id,
           status: "pending",
           isDeleted: false,
         },
+        limit: pageLimit,
+        offset: offset
       });
 
-      return res.status(200).json(tasks);
+      return res.status(200).json({ tasks: rows,totalRecords: count });
     }
 
     if (status == "in-progress") {
-      const tasks = await Task.findAll({
+      const {rows, count} = await Task.findAndCountAll({
         where: {
           userId: req.user.id,
           status: "in-progress",
           isDeleted: false,
         },
+        offset: offset,
+        limit: pageLimit
       });
 
-      return res.status(200).json(tasks);
+      return res.status(200).json({ tasks: rows, totalRecords: count });
     }
 
     if (status == "completed") {
-      const tasks = await Task.findAll({
+      const {rows, count} = await Task.findAndCountAll({
         where: {
           userId: req.user.id,
           status: "completed",
           isDeleted: false,
         },
+        offset: offset,
+        limit: pageLimit
       });
 
-      return res.status(200).json(tasks);
+      return res.status(200).json({tasks: rows, totalRecords:count });
     }
 
-    const tasks = await Task.findAll({
+    const {rows, count} = await Task.findAndCountAll({
       where: {
         userId: req.user.id,
         isDeleted: false,
       },
+      offset: offset,
+      limit: pageLimit
     });
 
-    return res.status(200).json(tasks);
+    return res.status(200).json({tasks: rows, totalRecords: count});
   } catch (error) {
     return res
       .status(500)
